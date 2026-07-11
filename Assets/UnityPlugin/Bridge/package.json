@@ -1,0 +1,10 @@
+{
+  "name": "com.zerowq.unityplugin.bridge",
+  "displayName": "Bridge",
+  "unity": "2019.4",
+  "version": "1.0.0",
+  "description": "API Bridge between different versions of C# and Unity",
+  "author": {
+    "name": "zeroWq"
+  }
+}
