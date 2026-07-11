@@ -1,7 +1,8 @@
 ﻿
-#if UNITY_2020_3_OR_NEWER
+#if UNITY_2021_3_OR_NEWER
 using System.Buffers;
 #else
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 #endif
@@ -13,7 +14,7 @@ namespace UnityPlugin.Bridge
     {
         public static UnityArrayPool<T> Shared { get; } = new UnityArrayPool<T>();
 
-#if UNITY_2020_3_OR_NEWER
+#if UNITY_2021_3_OR_NEWER
         public T[] Rent(int minimumLength) => ArrayPool<T>.Shared.Rent(minimumLength);
         public void Return(T[] array, bool clearArray = false) => ArrayPool<T>.Shared.Return(array, clearArray);
 #else

@@ -1,6 +1,6 @@
 ﻿using System;
 
-#if !UNITY_2020_3_OR_NEWER
+#if !UNITY_2021_3_OR_NEWER
 using System.Collections.Concurrent;
 #endif
 
@@ -15,7 +15,7 @@ namespace UnityPlugin.Bridge
 
         public static bool TryParseEnum(this Type enumType, string value, bool ignoreCase, out object result)
         {
-#if UNITY_2022_3_OR_NEWER
+#if UNITY_2021_3_OR_NEWER
             return Enum.TryParse(enumType, value, ignoreCase, out result);
 #else
             result = null;
@@ -41,7 +41,7 @@ namespace UnityPlugin.Bridge
 
         public static void Fill<T>(this T[] target, T value)
         {
-#if UNITY_2022_3_OR_NEWER
+#if UNITY_2021_3_OR_NEWER
             Array.Fill(target, value);
 #else
             if (target == null || target.Length == 0) return;
@@ -54,7 +54,7 @@ namespace UnityPlugin.Bridge
 
         public static void Fill<T>(this T[] target, T value, int startIndex, int count)
         {
-#if UNITY_2022_3_OR_NEWER
+#if UNITY_2021_3_OR_NEWER
             Array.Fill(target, value, startIndex, count);
 #else
             if (target == null || target.Length == 0) return;
@@ -69,7 +69,7 @@ namespace UnityPlugin.Bridge
         }
 
 
-#if !UNITY_2020_3_OR_NEWER
+#if !UNITY_2021_3_OR_NEWER
         public static void Clear<T>(this ConcurrentQueue<T> target)
         {
             if (target == null || target.Count < 1) return;

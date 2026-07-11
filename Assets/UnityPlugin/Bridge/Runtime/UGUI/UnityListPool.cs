@@ -6,12 +6,11 @@ using UnityEngine.Pool;
 using UnityEngine.UI;
 #endif
 
-namespace UnityPlugin.UGUIExt
+namespace UnityPlugin.Bridge
 {
     public static class UnityListPool<T>
     {
         public static List<T> Get() => ListPool<T>.Get();
-
         public static void Release(List<T> toRelease) => ListPool<T>.Release(toRelease);
     }
 }
