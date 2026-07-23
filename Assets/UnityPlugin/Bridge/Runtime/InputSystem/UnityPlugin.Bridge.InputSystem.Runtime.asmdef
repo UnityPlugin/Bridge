@@ -1,8 +1,8 @@
 {
-    "name": "UnityPlugin.Bridge.Runtime",
+    "name": "UnityPlugin.Bridge.InputSystem.Runtime",
     "rootNamespace": "UnityPlugin.Bridge",
     "references": [
-        "UnityPlugin.Bridge.InputSystem.Runtime"
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -10,7 +10,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "ENABLE_INPUT_SYSTEM"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }
