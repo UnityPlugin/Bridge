@@ -12,7 +12,6 @@ namespace UnityPlugin.Bridge
         public struct MouseButton
         {
             int _index;
-
 #if ENABLE_INPUT_SYSTEM
             ButtonControl _mouseButton;
 #endif
@@ -21,21 +20,14 @@ namespace UnityPlugin.Bridge
                 _index = index;
 #if ENABLE_INPUT_SYSTEM
                 _mouseButton = null;
+                GetMouseButtonControl(ref _mouseButton, _index);
 #endif
             }
-
-#if ENABLE_INPUT_SYSTEM
-            internal MouseButton(int index, ButtonControl mouseButton)
-            {
-                _index = index;
-                _mouseButton = mouseButton;
-            }
-#endif
 
             public bool IsPressed()
             {
 #if ENABLE_INPUT_SYSTEM
-                if (_mouseButton != null && _mouseButton.isPressed) return true;
+                if (GetMouseButtonControl(ref _mouseButton, _index) && _mouseButton.isPressed) return true;
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
@@ -47,7 +39,7 @@ namespace UnityPlugin.Bridge
             public bool WasPressedThisFrame()
             {
 #if ENABLE_INPUT_SYSTEM
-                if (_mouseButton != null && _mouseButton.wasPressedThisFrame) return true;
+                if (GetMouseButtonControl(ref _mouseButton, _index) && _mouseButton.wasPressedThisFrame) return true;
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
@@ -59,7 +51,7 @@ namespace UnityPlugin.Bridge
             public bool WasReleasedThisFrame()
             {
 #if ENABLE_INPUT_SYSTEM
-                if (_mouseButton != null && _mouseButton.wasReleasedThisFrame) return true;
+                if (GetMouseButtonControl(ref _mouseButton, _index) && _mouseButton.wasReleasedThisFrame) return true;
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
@@ -74,17 +66,10 @@ namespace UnityPlugin.Bridge
 #if ENABLE_INPUT_SYSTEM
             Vector2Control _pos;
 #endif
-            public MousePosition(Vector2Control pos)
-            {
-#if ENABLE_INPUT_SYSTEM
-                _pos = pos;
-#endif
-            }
-
             public Vector2 Value()
             {
 #if ENABLE_INPUT_SYSTEM
-                if (_pos != null) return _pos.ReadValue();
+                if (GetMousePositionControl(ref _pos)) return _pos.ReadValue();
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
@@ -99,17 +84,10 @@ namespace UnityPlugin.Bridge
 #if ENABLE_INPUT_SYSTEM
             Vector2Control _scroll;
 #endif
-            public MouseScroll(Vector2Control pos)
-            {
-#if ENABLE_INPUT_SYSTEM
-                _scroll = pos;
-#endif
-            }
-
             public Vector2 Value()
             {
 #if ENABLE_INPUT_SYSTEM
-                if (_scroll != null) return _scroll.ReadValue();
+                if (GetMousePositionControl(ref _scroll)) return _scroll.ReadValue();
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
@@ -121,25 +99,11 @@ namespace UnityPlugin.Bridge
 
         public static MousePosition GetMousePosition()
         {
-#if ENABLE_INPUT_SYSTEM
-            var mouse = Mouse.current;
-            if (mouse != null)
-            {
-                return new MousePosition(mouse.position);
-            }
-#endif
             return new MousePosition();
         }
 
         public static MouseScroll GetMouseScroll()
         {
-#if ENABLE_INPUT_SYSTEM
-            var mouse = Mouse.current;
-            if (mouse != null)
-            {
-                return new MouseScroll(mouse.scroll);
-            }
-#endif
             return new MouseScroll();
         }
 
@@ -151,26 +115,69 @@ namespace UnityPlugin.Bridge
 
         public static MouseButton GetMouseButton(int index)
         {
+            return new MouseButton(index);
+        }
+
 #if ENABLE_INPUT_SYSTEM
+
+        static bool GetMouseButtonControl(ref ButtonControl mouseCtrl, int index)
+        {
+            if (mouseCtrl != null && IsInputControlAvailable(mouseCtrl)) return true;
+
+            mouseCtrl = null;
             var mouse = Mouse.current;
             if (mouse != null)
             {
                 switch (index)
                 {
                     case 0:
-                        return new MouseButton(0, mouse.leftButton);
+                        mouseCtrl = mouse.leftButton;
+                        break;
                     case 1:
-                        return new MouseButton(1, mouse.rightButton);
+                        mouseCtrl = mouse.rightButton;
+                        break;
                     case 2:
-                        return new MouseButton(2, mouse.middleButton);
+                        mouseCtrl = mouse.rightButton;
+                        break;
                     case 3:
-                        return new MouseButton(2, mouse.forwardButton);
+                        mouseCtrl = mouse.rightButton;
+                        break;
                     case 4:
-                        return new MouseButton(2, mouse.backButton);
+                        mouseCtrl = mouse.rightButton;
+                        break;
                 }
+
             }
-#endif
-            return new MouseButton(index);
+            return mouseCtrl != null;
         }
+
+        static bool GetMousePositionControl(ref Vector2Control mouseCtrl)
+        {
+            if (mouseCtrl != null && IsInputControlAvailable(mouseCtrl)) return true;
+
+            mouseCtrl = null;
+            var mouse = Mouse.current;
+            if (mouse != null)
+            {
+                mouseCtrl = mouse.position;
+            }
+
+            return mouseCtrl != null;
+        }
+
+        static bool GetMouseScrollControl(ref Vector2Control mouseCtrl)
+        {
+            if (mouseCtrl != null && IsInputControlAvailable(mouseCtrl)) return true;
+
+            mouseCtrl = null;
+            var mouse = Mouse.current;
+            if (mouse != null)
+            {
+                mouseCtrl = mouse.scroll;
+            }
+
+            return mouseCtrl != null;
+        }
+#endif
     }
 }

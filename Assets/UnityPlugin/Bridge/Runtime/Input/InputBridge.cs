@@ -2,13 +2,32 @@
 using UnityEngine.EventSystems;
 
 #if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.InputSystem.Utilities;
 #endif
 
 namespace UnityPlugin.Bridge
 {
     public partial class InputBridge
     {
+
+#if ENABLE_INPUT_SYSTEM
+        static bool IsInputControlAvailable(InputControl ctrl)
+        {
+            if (ctrl == null) return false;
+
+            var device = ctrl.device;
+            if (device == null) return false;
+
+            if (!device.enabled) return false;
+
+            if (InputSystem.disconnectedDevices.ContainsReference(device)) return false;
+
+            return true;
+        }
+#endif
+
         public static void CheckDefaultInputModule(bool autoCreateSystem = true, bool inputSystemFirst = true)
         {
             if (EventSystem.current == null)
