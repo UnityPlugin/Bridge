@@ -1,7 +1,8 @@
 {
     "name": "UnityPlugin.Bridge.Runtime",
-    "rootNamespace": "UnityPlugin.Bridge",
-    "references": [],
+    "references": [
+        "Unity.InputSystem"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
