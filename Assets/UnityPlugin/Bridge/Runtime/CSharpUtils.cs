@@ -1,6 +1,7 @@
 ﻿using System;
 
 #if !UNITY_2021_3_OR_NEWER
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 #endif
 
@@ -8,6 +9,8 @@ namespace UnityPlugin.Bridge
 {
     public static class CSharpUtils
     {
+        #region Type Enum
+
         public static bool TryParseEnum(this Type enumType, string value, out object result)
         {
             return enumType.TryParseEnum(value, false, out result);
@@ -39,6 +42,10 @@ namespace UnityPlugin.Bridge
 #endif
         }
 
+        #endregion
+
+        #region Type Array
+
         public static void Fill<T>(this T[] target, T value)
         {
 #if UNITY_2021_3_OR_NEWER
@@ -68,6 +75,87 @@ namespace UnityPlugin.Bridge
 #endif
         }
 
+        #endregion
+
+        #region Type Queue
+
+#if !UNITY_2021_3_OR_NEWER
+
+        public static bool TryDequeue<T>(this Queue<T> target, out T result)
+        {
+            result = default;
+            if (target == null) return false;
+
+            if (target.Count < 1) return false;
+            try
+            {
+                result = target.Dequeue();
+                return true;
+            }
+            catch (Exception) { }
+            return false;
+        }
+
+        public static bool TryPeek<T>(this Queue<T> target, out T result)
+        {
+            result = default;
+            if (target == null) return false;
+
+            if (target.Count < 1) return false;
+            try
+            {
+                result = target.Peek();
+                return true;
+            }
+            catch (Exception) { }
+
+            return false;
+        }
+
+#endif
+
+        #endregion
+
+        #region Type Stack
+
+#if !UNITY_2021_3_OR_NEWER
+
+        public static bool TryPop<T>(this Stack<T> target, out T result)
+        {
+            result = default;
+            if (target == null) return false;
+
+            if (target.Count < 1) return false;
+            try
+            {
+                result = target.Pop();
+                return true;
+            }
+            catch (Exception) { }
+            return false;
+        }
+
+        public static bool TryPeek<T>(this Stack<T> target, out T result)
+        {
+            result = default;
+            if (target == null) return false;
+
+            if (target.Count < 1) return false;
+            try
+            {
+                result = target.Peek();
+                return true;
+            }
+            catch (Exception) { }
+
+            return false;
+        }
+
+#endif
+
+        #endregion
+
+        #region Type ConcurrentQueue
 
 #if !UNITY_2021_3_OR_NEWER
         public static void Clear<T>(this ConcurrentQueue<T> target)
@@ -76,5 +164,7 @@ namespace UnityPlugin.Bridge
             while (target.TryDequeue(out _)) { }
         }
 #endif
+
+        #endregion
     }
 }
