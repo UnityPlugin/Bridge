@@ -1,35 +1,24 @@
-﻿using UnityEngine;
+﻿#if USE_UGUI
+using UnityEngine;
 using UnityEngine.EventSystems;
+#endif
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.InputSystem.Utilities;
+#endif
+
+#if USE_UGUI && ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem.UI;
 #endif
 
 namespace UnityPlugin.Bridge
 {
     public partial class InputBridge
     {
-
-#if ENABLE_INPUT_SYSTEM
-        static bool IsInputControlAvailable(InputControl ctrl)
-        {
-            if (ctrl == null) return false;
-
-            var device = ctrl.device;
-            if (device == null) return false;
-
-            if (!device.enabled) return false;
-
-            if (InputSystem.disconnectedDevices.ContainsReference(device)) return false;
-
-            return true;
-        }
-#endif
-
         public static void CheckDefaultInputModule(bool autoCreateSystem = true, bool inputSystemFirst = true)
         {
+#if USE_UGUI
             if (EventSystem.current == null)
             {
                 if (autoCreateSystem)
@@ -71,13 +60,27 @@ namespace UnityPlugin.Bridge
             if (inputOld) AddStandaloneInputModule();
             else RemoveStandaloneInputModule();
 #endif
+
+#endif
         }
 
-        static void DestroyObject(Object obj)
+#if ENABLE_INPUT_SYSTEM
+        static bool IsInputControlAvailable(InputControl ctrl)
         {
-            if (Application.isPlaying) Object.Destroy(obj);
-            else Object.DestroyImmediate(obj);
+            if (ctrl == null) return false;
+
+            var device = ctrl.device;
+            if (device == null) return false;
+
+            if (!device.enabled) return false;
+
+            if (InputSystem.disconnectedDevices.ContainsReference(device)) return false;
+
+            return true;
         }
+#endif
+
+#if USE_UGUI
 
 #if ENABLE_INPUT_SYSTEM
 
@@ -111,6 +114,14 @@ namespace UnityPlugin.Bridge
             if (EventSystem.current == null) return;
             var module = EventSystem.current.GetComponent<StandaloneInputModule>();
             if (module) DestroyObject(module);
+        }
+
+#endif
+
+        static void DestroyObject(Object obj)
+        {
+            if (Application.isPlaying) Object.Destroy(obj);
+            else Object.DestroyImmediate(obj);
         }
 
 #endif
