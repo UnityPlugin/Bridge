@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd6e407540a22e428a0027f23489797, type: 3}
   m_Name: PackageInfo
   m_EditorClassIdentifier: 
-  gitURL: git@github.com:UnityPlugin/Package.git?path=/Assets/UnityPlugin/Package
+  gitURL: git@github.com:UnityPlugin/Bridge.git?path=/Assets/UnityPlugin/Bridge
   packageName: com.zerowq.unityplugin.bridge
   displayName: Bridge
   unity: 2019.4
