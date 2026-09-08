@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace UnityPlugin.Bridge
 {
@@ -129,23 +127,6 @@ namespace UnityPlugin.Bridge
             }
 
             return result;
-        }
-
-        public struct BuilderScope : IDisposable
-        {
-            StringBuilder _strBuilder;
-
-            internal BuilderScope(out StringBuilder strBuilder)
-            {
-                _strBuilder = UnityGenericPool<StringBuilder>.Get();
-                _strBuilder.Clear();
-                strBuilder = _strBuilder;
-            }
-
-            public void Dispose()
-            {
-                UnityGenericPool<StringBuilder>.Release(_strBuilder);
-            }
         }
     }
 }
