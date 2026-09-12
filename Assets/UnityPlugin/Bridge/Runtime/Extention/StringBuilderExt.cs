@@ -120,15 +120,13 @@ namespace UnityPlugin.Bridge
 
         internal static char ToUpper(this char c)
         {
-            if (c >= 'a' && c <= 'z')
-                c -= '\x100';
+            if (c >= 'a' && c <= 'z') c -= '\x20';
             return c;
         }
 
         internal static char ToLower(this char c)
         {
-            if (c >= 'A' && c <= 'Z')
-                c += '\x100';
+            if (c >= 'A' && c <= 'Z') c += '\x20';
             return c;
         }
     }

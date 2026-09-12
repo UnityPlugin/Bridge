@@ -26,6 +26,7 @@ namespace UnityPlugin.Bridge
                 if (_poolObj != null)
                 {
                     UnityGenericPool<T>.Release(_poolObj);
+                    _poolObj = null;
                 }
             }
         }

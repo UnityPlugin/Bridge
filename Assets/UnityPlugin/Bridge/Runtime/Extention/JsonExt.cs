@@ -22,93 +22,94 @@ namespace UnityPlugin.Bridge
             var ignoreNewLine = false;
             var indent = 0;
 
-            PoolExt.GetScope<StringBuilder>(out var sb);
-
-            sb.Clear().Append(jsonStr);
-
-            var i = 0;
-            while (i < sb.Length)
+            using (PoolExt.GetScope<StringBuilder>(out var sb))
             {
-                if (!isString && IsToken(TOKEN_STRING, sb[i]))
-                {
-                    isString = true;
+                sb.Clear().Append(jsonStr);
 
-                    if (!ignoreNewLine && indent <= indentLevel)
+                var i = 0;
+                while (i < sb.Length)
+                {
+                    if (!isString && IsToken(TOKEN_STRING, sb[i]))
                     {
-                        InsertNewLineIndent(sb, ref i, indentStr, indent);
+                        isString = true;
+
+                        if (!ignoreNewLine && indent <= indentLevel)
+                        {
+                            InsertNewLineIndent(sb, ref i, indentStr, indent);
+                        }
+
+                        i++;
                     }
 
-                    i++;
-                }
-
-                if (isString)
-                {
-                    while (i < sb.Length)
+                    if (isString)
                     {
-                        if (IsToken(TOKEN_STRING_SKIP, sb[i])) i += 2;
-                        if (IsToken(TOKEN_STRING, sb[i]))
+                        while (i < sb.Length)
                         {
-                            isString = false;
+                            if (IsToken(TOKEN_STRING_SKIP, sb[i])) i += 2;
+                            if (IsToken(TOKEN_STRING, sb[i]))
+                            {
+                                isString = false;
+                                i++;
+                                break;
+                            }
+
                             i++;
-                            break;
-                        }
-
-                        i++;
-                    }
-
-                    ignoreNewLine = false;
-                }
-
-                if (!isString)
-                {
-                    if (IsToken(TOKEN_TRIM, sb[i]))
-                    {
-                        while (IsToken(TOKEN_TRIM, sb[i])) sb.Remove(i, 1);
-                        continue;
-                    }
-
-                    if (IsToken(TOKEN_PROPERTY_START, sb[i]))
-                    {
-                        ignoreNewLine = true;
-                        i++;
-                        continue;
-                    }
-
-                    if (IsToken(TOKEN_INDENT_START, sb[i]))
-                    {
-                        if (i > 0 && !ignoreNewLine && indent <= indentLevel)
-                        {
-                            InsertNewLineIndent(sb, ref i, indentStr, indent);
                         }
 
                         ignoreNewLine = false;
-                        indent++;
-                        i++;
-                        continue;
                     }
 
-                    if (IsToken(TOKEN_INDENT_END, sb[i]))
+                    if (!isString)
                     {
-                        indent--;
-                        if (indent + 1 <= indentLevel)
+                        if (IsToken(TOKEN_TRIM, sb[i]))
                         {
-                            InsertNewLineIndent(sb, ref i, indentStr, indent);
+                            while (IsToken(TOKEN_TRIM, sb[i])) sb.Remove(i, 1);
+                            continue;
                         }
 
-                        ignoreNewLine = false;
+                        if (IsToken(TOKEN_PROPERTY_START, sb[i]))
+                        {
+                            ignoreNewLine = true;
+                            i++;
+                            continue;
+                        }
+
+                        if (IsToken(TOKEN_INDENT_START, sb[i]))
+                        {
+                            if (i > 0 && !ignoreNewLine && indent <= indentLevel)
+                            {
+                                InsertNewLineIndent(sb, ref i, indentStr, indent);
+                            }
+
+                            ignoreNewLine = false;
+                            indent++;
+                            i++;
+                            continue;
+                        }
+
+                        if (IsToken(TOKEN_INDENT_END, sb[i]))
+                        {
+                            indent--;
+                            if (indent + 1 <= indentLevel)
+                            {
+                                InsertNewLineIndent(sb, ref i, indentStr, indent);
+                            }
+
+                            ignoreNewLine = false;
+                            i++;
+                            continue;
+                        }
+
+                        if (IsToken(TOKEN_PROPERTY_END, sb[i])) ignoreNewLine = false;
                         i++;
-                        continue;
+
+                        var a = false;
+                        if (a) break;
                     }
-
-                    if (IsToken(TOKEN_PROPERTY_END, sb[i])) ignoreNewLine = false;
-                    i++;
-
-                    var a = false;
-                    if (a) break;
                 }
+
+                return sb.ToString();
             }
-
-            return sb.ToString();
         }
 
         static bool IsToken(char[] tokenList, char value)
