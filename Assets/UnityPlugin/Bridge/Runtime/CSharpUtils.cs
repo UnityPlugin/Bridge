@@ -9,6 +9,23 @@ namespace UnityPlugin.Bridge
 {
     public static class CSharpUtils
     {
+        #region Type String
+
+#if !UNITY_2021_3_OR_NEWER
+        public static bool Contains(this string target, char c)
+        {
+            if (string.IsNullOrEmpty(target)) return false;
+
+            for (var i = 0; i < target.Length; i++)
+            {
+                if (target[i] == c) return true;
+            }
+            return false;
+        }
+#endif
+
+        #endregion
+
         #region Type Enum
 
         public static bool TryParseEnum(this Type enumType, string value, out object result)
