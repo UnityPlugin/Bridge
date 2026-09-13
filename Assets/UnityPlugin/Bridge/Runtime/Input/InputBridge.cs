@@ -3,12 +3,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 #endif
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 #endif
 
-#if USE_UGUI && ENABLE_INPUT_SYSTEM
+#if USE_UGUI && ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
 using UnityEngine.InputSystem.UI;
 #endif
 
@@ -33,7 +33,7 @@ namespace UnityPlugin.Bridge
                 }
             }
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
             var inputNew = true;
 #else
             var inputNew = false;
@@ -51,7 +51,7 @@ namespace UnityPlugin.Bridge
                 else inputNew = false;
             }
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
             if (inputNew) AddUIInputModule();
             else RemoveUIInputModule();
 #endif
@@ -64,7 +64,7 @@ namespace UnityPlugin.Bridge
 #endif
         }
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
         static bool IsInputControlAvailable(InputControl ctrl)
         {
             if (ctrl == null) return false;
@@ -82,7 +82,7 @@ namespace UnityPlugin.Bridge
 
 #if USE_UGUI
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
 
         static void AddUIInputModule()
         {

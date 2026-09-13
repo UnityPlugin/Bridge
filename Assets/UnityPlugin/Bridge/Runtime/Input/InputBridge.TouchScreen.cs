@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
 
@@ -12,7 +12,7 @@ namespace UnityPlugin.Bridge
         {
             public int TouchCount()
             {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
                 var touchscreen = Touchscreen.current;
                 if (touchscreen != null)
                 {

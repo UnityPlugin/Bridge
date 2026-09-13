@@ -16,6 +16,11 @@
             "name": "com.unity.ugui",
             "expression": "1.0.0",
             "define": "USE_UGUI"
+        },
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0.0",
+            "define": "USE_INPUT_SYSTEM"
         }
     ],
     "noEngineReferences": false

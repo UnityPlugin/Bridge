@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 #endif
@@ -12,13 +12,13 @@ namespace UnityPlugin.Bridge
         public struct MouseButton
         {
             int _index;
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
             ButtonControl _mouseButton;
 #endif
             internal MouseButton(int index)
             {
                 _index = index;
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
                 _mouseButton = null;
                 GetMouseButtonControl(ref _mouseButton, _index);
 #endif
@@ -26,7 +26,7 @@ namespace UnityPlugin.Bridge
 
             public bool IsPressed()
             {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
                 if (GetMouseButtonControl(ref _mouseButton, _index) && _mouseButton.isPressed) return true;
 #endif
 
@@ -38,7 +38,7 @@ namespace UnityPlugin.Bridge
 
             public bool WasPressedThisFrame()
             {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
                 if (GetMouseButtonControl(ref _mouseButton, _index) && _mouseButton.wasPressedThisFrame) return true;
 #endif
 
@@ -50,7 +50,7 @@ namespace UnityPlugin.Bridge
 
             public bool WasReleasedThisFrame()
             {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
                 if (GetMouseButtonControl(ref _mouseButton, _index) && _mouseButton.wasReleasedThisFrame) return true;
 #endif
 
@@ -63,12 +63,12 @@ namespace UnityPlugin.Bridge
 
         public struct MousePosition
         {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
             Vector2Control _pos;
 #endif
             public Vector2 Value()
             {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
                 if (GetMousePositionControl(ref _pos)) return _pos.ReadValue();
 #endif
 
@@ -81,12 +81,12 @@ namespace UnityPlugin.Bridge
 
         public struct MouseScroll
         {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
             Vector2Control _scroll;
 #endif
             public Vector2 Value()
             {
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
                 if (GetMousePositionControl(ref _scroll)) return _scroll.ReadValue();
 #endif
 
@@ -118,7 +118,7 @@ namespace UnityPlugin.Bridge
             return new MouseButton(index);
         }
 
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM && USE_INPUT_SYSTEM
 
         static bool GetMouseButtonControl(ref ButtonControl mouseCtrl, int index)
         {
